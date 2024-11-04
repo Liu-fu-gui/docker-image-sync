@@ -3,6 +3,10 @@
         "registry.cn-hangzhou.aliyuncs.com": {
             "username": "涛涛的存钱罐",
             "password": "DOCKERHUB_PASSWORD"
+        },
+        "docker.io": {
+            "username": "2467802439@qq.com",
+            "password": "Liu123456"
         }
     },
     "images": {
