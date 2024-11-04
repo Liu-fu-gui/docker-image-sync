@@ -44,12 +44,12 @@ jobs:
           STATUS="镜像已存在"
         fi
         
-        curl -X POST https://oapi.dingtalk.com/robot/send?access_token=ACCESS_TOKEN \
+        curl -X POST https://oapi.dingtalk.com/robot/send?access_token=${{ secrets.ACCESS_TOKEN }} \
         -H 'Content-Type: application/json' \
         -d "{
           \"msgtype\": \"text\",
           \"text\": {
-            \"content\": \"同步状态: ${STATUS}，镜像名称: ${IMAGE_SOURCE}，目标地址: ${IMAGE_TARGET}\"
+            \"content\": \"同步状态: ${STATUS}，镜像名称: ${IMAGE_SOURCE}，目标地址: ${IMAGE_TARGET}\ "
           },
           \"at\": {
             \"isAtAll\": true
