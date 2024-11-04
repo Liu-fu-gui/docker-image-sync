@@ -22,40 +22,36 @@ jobs:
         wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
         tar -zxf image-syncer-v1.5.5-linux-amd64.tar.gz
       
+    - name: 从config.json中提取源和目标镜像
+      id: extract_images
+      run: |
+        IMAGE_SOURCE=$(jq -r '.images | keys | .[0]' config.json)
+        IMAGE_TARGET=$(jq -r '.images | .[]' config.json)
+        echo "IMAGE_SOURCE=${IMAGE_SOURCE}" >> $GITHUB_ENV
+        echo "IMAGE_TARGET=${IMAGE_TARGET}" >> $GITHUB_ENV
+
     - name: 执行同步镜像
       id: sync
       run: |
-        ./image-syncer --proc=20 --config=config.json --retries=2 || echo "Sync failed"
+        ./image-syncer --proc=20 --config=config.json --retries=2
 
     - name: 发送钉钉通知
       run: |
-        # 从 config.json 中提取源和目标镜像
-        IMAGE_SOURCE=$(jq -r '.images | keys_unsorted[]' config.json)
-        IMAGE_TARGET=$(jq -r '.images | .[]' config.json)
-
-        # 循环处理每个镜像
-        for src in $IMAGE_SOURCE; do
-          target=$(jq -r --arg src "$src" '.images[$src]' config.json)
-          IMAGE_SOURCE="$src"
-          IMAGE_TARGET="$target"
-
-          if [[ "${{ steps.sync.outcome }}" == "success" ]]; then
-            STATUS="同步成功"
-          elif [[ "${{ steps.sync.outcome }}" == "failure" ]]; then
-            STATUS="同步失败"
-          else
-            STATUS="镜像已存在"
-          fi
-          
-          curl -X POST https://oapi.dingtalk.com/robot/send?access_token=2dd786ab5ee396d7c2d96877585467daa0c67b62546b5a550da948f1d856463b \
-          -H 'Content-Type: application/json' \
-          -d '{
-            "msgtype": "text",
-            "text": {
-              "content": "'"${STATUS}"' - 镜像: '"${IMAGE_SOURCE}"' -> 目标: '"${IMAGE_TARGET}"'
-            },
-            "at": {
-              "isAtAll": true
-            }
-          }'
-        done
+        STATUS="同步成功"
+        if [[ "${{ steps.sync.outcome }}" == "failure" ]]; then
+          STATUS="同步失败"
+        elif [[ "${{ steps.sync.outcome }}" == "skipped" ]]; then
+          STATUS="镜像已存在"
+        fi
+        
+        curl -X POST https://oapi.dingtalk.com/robot/send?access_token=2dd786ab5ee396d7c2d96877585467daa0c67b62546b5a550da948f1d856463b \
+        -H 'Content-Type: application/json' \
+        -d "{
+          \"msgtype\": \"text\",
+          \"text\": {
+            \"content\": \"同步状态: ${STATUS}，镜像名称: ${IMAGE_SOURCE}，目标地址: ${IMAGE_TARGET}\"
+          },
+          \"at\": {
+            \"isAtAll\": true
+          }
+        }"
