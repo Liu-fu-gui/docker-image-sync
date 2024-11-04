@@ -49,7 +49,7 @@ jobs:
         -d "{
           \"msgtype\": \"text\",
           \"text\": {
-            \"content\": \"同步状态: ${STATUS}，镜像名称: ${IMAGE_SOURCE}，目标地址: ${IMAGE_TARGET}\ "
+            \"content\": \"同步状态: ${STATUS}，镜像名称: ${IMAGE_SOURCE}，目标地址: ${IMAGE_TARGET}\"
           },
           \"at\": {
             \"isAtAll\": true
