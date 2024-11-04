@@ -44,7 +44,7 @@ jobs:
           STATUS="镜像已存在"
         fi
         
-        curl -X POST https://oapi.dingtalk.com/robot/send?access_token=ACCESS-TOKEN \
+        curl -X POST https://oapi.dingtalk.com/robot/send?access_token=ACCESS_TOKEN \
         -H 'Content-Type: application/json' \
         -d "{
           \"msgtype\": \"text\",
