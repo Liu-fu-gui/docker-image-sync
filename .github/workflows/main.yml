@@ -25,31 +25,37 @@ jobs:
     - name: 执行同步镜像
       id: sync
       run: |
-        ./image-syncer --proc=20 --config=config.json --retries=2
-        if [ $? -eq 0 ]; then
-          echo "sync_status=success" >> $GITHUB_ENV
-          echo "镜像名称: docker.io/nginx, 版本: latest" >> $GITHUB_ENV
-        else
-          echo "sync_status=failure" >> $GITHUB_ENV
-          echo "镜像名称: docker.io/nginx, 版本: latest" >> $GITHUB_ENV
-        fi
+        ./image-syncer --proc=20 --config=config.json --retries=2 || echo "Sync failed"
 
     - name: 发送钉钉通知
       run: |
-        if [ "${{ env.sync_status }}" == "success" ]; then
-          message="镜像同步成功！镜像名称: ${IMAGE_NAME}, 版本: ${IMAGE_VERSION}"
-        else
-          message="镜像同步失败！镜像名称: ${IMAGE_NAME}, 版本: ${IMAGE_VERSION}"
-        fi
+        # 从 config.json 中提取源和目标镜像
+        IMAGE_SOURCE=$(jq -r '.images | keys_unsorted[]' config.json)
+        IMAGE_TARGET=$(jq -r '.images | .[]' config.json)
 
-        curl -X POST https://oapi.dingtalk.com/robot/send?access_token=2dd786ab5ee396d7c2d96877585467daa0c67b62546b5a550da948f1d856463b \
-        -H 'Content-Type: application/json' \
-        -d '{
-          "msgtype": "text",
-          "text": {
-            "content": "'"${message}"'"
-          },
-          "at": {
-            "isAtAll": true
-          }
-        }'
+        # 循环处理每个镜像
+        for src in $IMAGE_SOURCE; do
+          target=$(jq -r --arg src "$src" '.images[$src]' config.json)
+          IMAGE_SOURCE="$src"
+          IMAGE_TARGET="$target"
+
+          if [[ "${{ steps.sync.outcome }}" == "success" ]]; then
+            STATUS="同步成功"
+          elif [[ "${{ steps.sync.outcome }}" == "failure" ]]; then
+            STATUS="同步失败"
+          else
+            STATUS="镜像已存在"
+          fi
+          
+          curl -X POST https://oapi.dingtalk.com/robot/send?access_token=2dd786ab5ee396d7c2d96877585467daa0c67b62546b5a550da948f1d856463b \
+          -H 'Content-Type: application/json' \
+          -d '{
+            "msgtype": "text",
+            "text": {
+              "content": "'"${STATUS}"' - 镜像: '"${IMAGE_SOURCE}"' -> 目标: '"${IMAGE_TARGET}"'
+            },
+            "at": {
+              "isAtAll": true
+            }
+          }'
+        done
