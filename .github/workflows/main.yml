@@ -21,7 +21,7 @@ jobs:
     - name: 下载image-sync工具包
       run: |
         echo "下载 image-syncer 工具包"
-        wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.3.1/image-syncer-v1.3.1-linux-amd64.tar.gz
+        wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
         tar -zxf image-syncer-v1.3.1-linux-amd64.tar.gz
       
     - name: 执行同步镜像
