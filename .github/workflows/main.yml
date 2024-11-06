@@ -15,6 +15,7 @@ jobs:
       
     - name: 镜像同步配置处理
       run: |
+        # 替换 config.json 中的 DOCKERHUB_PASSWORD
         sed -i 's/DOCKERHUB_PASSWORD/${{ secrets.DOCKERHUB_PASSWORD }}/g' config.json
         
     - name: 下载image-sync工具包
@@ -22,20 +23,31 @@ jobs:
         wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
         tar -zxf image-syncer-v1.5.5-linux-amd64.tar.gz
       
-    - name: 创建镜像列表文件
+    - name: 创建auth.json文件
       run: |
-        # 生成镜像对的列表
-        echo -e "docker.io/nginx:latest registry.cn-hangzhou.aliyuncs.com/imagessync/nginx" > images_list.txt
-        echo -e "gcr.io/kaniko-project/executor registry.cn-hangzhou.aliyuncs.com/imagessync/kaniko-executor" >> images_list.txt
+        # 使用 sed 替换 GitHub Secrets 中的 DOCKERHUB_PASSWORD 变量
+        echo '{
+          "registry.cn-hangzhou.aliyuncs.com": {
+            "username": "涛涛的存钱罐",
+            "password": "'${{ secrets.DOCKERHUB_PASSWORD }}'"
+          }
+        }' > auth.json
 
-        # 输出镜像列表用于调试
-        cat images_list.txt
+    - name: 动态生成镜像同步配对列表
+      run: |
+        # 使用 jq 动态生成镜像同步的配置
+        echo "images:" > images.json
+        cat config.json | jq -r '.images | to_entries | .[] | {source: .key, target: .value} ' | while IFS= read -r line; do
+          echo "  - source: $(echo $line | jq -r .source)" >> images.json
+          echo "    target: $(echo $line | jq -r .target)" >> images.json
+        done
+        cat images.json  # 输出生成的 images.json 以供调试查看
 
     - name: 执行同步镜像
       id: sync
       run: |
-        # 使用 --images 标志提供镜像列表文件
-        ./image-syncer --proc=20 --images=images_list.txt --retries=2
+        # 使用 --auth 和 --images 参数
+        ./image-syncer --proc=20 --auth=auth.json --images=images.json --retries=2
 
     - name: 发送钉钉通知
       run: |
