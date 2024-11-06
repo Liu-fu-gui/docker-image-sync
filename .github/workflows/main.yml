@@ -22,26 +22,20 @@ jobs:
         wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
         tar -zxf image-syncer-v1.5.5-linux-amd64.tar.gz
       
-    - name: 从config.json中提取源和目标镜像
-      id: extract_images
+    - name: 创建镜像列表文件
       run: |
-        # 提取源镜像和目标镜像对，并清理空格或特殊字符
-        IMAGE_PAIRS=$(jq -r '.images | to_entries | .[] | "\(.key) \(.value)"' config.json | xargs)
+        # 生成镜像对的列表
+        echo -e "docker.io/nginx:latest registry.cn-hangzhou.aliyuncs.com/imagessync/nginx" > images_list.txt
+        echo -e "gcr.io/kaniko-project/executor registry.cn-hangzhou.aliyuncs.com/imagessync/kaniko-executor" >> images_list.txt
 
-        # 将镜像对写入环境变量
-        echo "IMAGE_PAIRS=${IMAGE_PAIRS}" >> $GITHUB_ENV
-        
-        # 输出调试信息
-        echo "Extracted IMAGE_PAIRS: ${IMAGE_PAIRS}"
+        # 输出镜像列表用于调试
+        cat images_list.txt
 
     - name: 执行同步镜像
       id: sync
       run: |
-        # 提取源镜像和目标镜像的配对并进行同步
-        echo "$IMAGE_PAIRS" | while read SOURCE TARGET; do
-          echo "同步源镜像: ${SOURCE} 到目标镜像: ${TARGET}"
-          ./image-syncer --proc=20 --source=${SOURCE} --target=${TARGET} --retries=2
-        done
+        # 使用 --images 标志提供镜像列表文件
+        ./image-syncer --proc=20 --images=images_list.txt --retries=2
 
     - name: 发送钉钉通知
       run: |
@@ -53,16 +47,14 @@ jobs:
         fi
 
         # 发送钉钉通知
-        echo "$IMAGE_PAIRS" | while read SOURCE TARGET; do
-          curl -X POST https://oapi.dingtalk.com/robot/send?access_token=${{ secrets.ACCESS_TOKEN }} \
-          -H 'Content-Type: application/json' \
-          -d "{
-            \"msgtype\": \"text\",
-            \"text\": {
-              \"content\": \"同步状态: ${STATUS}，源镜像: ${SOURCE}，目标镜像: ${TARGET}\"
-            },
-            \"at\": {
-              \"isAtAll\": true
-            }
-          }"
-        done
+        curl -X POST https://oapi.dingtalk.com/robot/send?access_token=${{ secrets.ACCESS_TOKEN }} \
+        -H 'Content-Type: application/json' \
+        -d "{
+          \"msgtype\": \"text\",
+          \"text\": {
+            \"content\": \"同步状态: ${STATUS}\"
+          },
+          \"at\": {
+            \"isAtAll\": true
+          }
+        }"
