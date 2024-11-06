@@ -1,13 +1,11 @@
 {
     "auth": {
-        "registry.cn-hangzhou.aliyuncs.com": {
-            "username": "涛涛的存钱罐",
-            "password": "DOCKERHUB_PASSWORD"
-        }
-    },
-    "images": {
-        "docker.io/nginx:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx",
-        "gcr.io/kaniko-project/executor": "a121673163/kaniko-executor"
-    },
-    "_comment": "单个版本和所有版本的说明"
-}
+    "registry.cn-hangzhou.aliyuncs.com": {
+        "username": "涛涛的存钱罐",
+        "password": "DOCKERHUB_PASSWORD"
+    }
+},
+"images": {
+    "docker.io/nginx:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx",
+    "gcr.io/kaniko-project/executor": "a121673163/kaniko-executor"
+}}
