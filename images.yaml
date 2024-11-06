@@ -1,6 +1,0 @@
-{
-  "images": [
-    { "source": "docker.io/nginx:latest", "target": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx" },
-    { "source": "gcr.io/kaniko-project/executor", "target": "registry.cn-hangzhou.aliyuncs.com/imagessync/kaniko-executor" }
-  ]
-}

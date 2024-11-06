@@ -2,9 +2,9 @@ name: docker-image-sync
 on:
   push:
     branches: [ main ]
-  #schedule:
-  #  - cron: '0 01 * * *'
-
+  schedule:
+    - cron: '0 01 * * *'
+  
 jobs:
   image-sync:
     runs-on: ubuntu-latest
@@ -15,39 +15,21 @@ jobs:
       
     - name: 镜像同步配置处理
       run: |
-        # 替换 config.json 中的 DOCKERHUB_PASSWORD
+        echo "处理配置文件"
         sed -i 's/DOCKERHUB_PASSWORD/${{ secrets.DOCKERHUB_PASSWORD }}/g' config.json
         
     - name: 下载image-sync工具包
       run: |
-        wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
-        tar -zxf image-syncer-v1.5.5-linux-amd64.tar.gz
+        echo "下载 image-syncer 工具包"
+        wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.3.1/image-syncer-v1.3.1-linux-amd64.tar.gz
+        tar -zxf image-syncer-v1.3.1-linux-amd64.tar.gz
       
-    - name: 创建auth.json文件
-      run: |
-        # 使用 sed 替换 GitHub Secrets 中的 DOCKERHUB_PASSWORD 变量
-        echo '{
-          "registry.cn-hangzhou.aliyuncs.com": {
-            "username": "涛涛的存钱罐",
-            "password": "'${{ secrets.DOCKERHUB_PASSWORD }}'"
-          }
-        }' > auth.json
-
-    - name: 动态生成镜像同步配对列表
-      run: |
-        # 使用 jq 动态生成镜像同步的配置
-        echo "images:" > images.json
-        cat config.json | jq -r '.images | to_entries | .[] | {source: .key, target: .value} ' | while IFS= read -r line; do
-          echo "  - source: $(echo $line | jq -r .source)" >> images.json
-          echo "    target: $(echo $line | jq -r .target)" >> images.json
-        done
-        cat images.json  # 输出生成的 images.json 以供调试查看
-
     - name: 执行同步镜像
-      id: sync
       run: |
-        # 使用 --auth 和 --images 参数
-        ./image-syncer --proc=20 --auth=auth.json --images=images.json --retries=2
+        set -e  # 如果有命令失败则停止执行
+        echo "开始同步镜像"
+        ./image-syncer --proc=20 --config=config.json --retries=2 || { echo '镜像同步失败'; exit 1; }
+        echo "同步镜像完成"
 
     - name: 发送钉钉通知
       run: |
