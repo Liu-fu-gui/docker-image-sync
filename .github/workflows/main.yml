@@ -2,8 +2,8 @@ name: docker-image-sync
 on:
   push:
     branches: [ main ]
-  schedule:
-    - cron: '0 01 * * *'
+  #schedule:
+  #  - cron: '0 01 * * *'
   
 jobs:
   image-sync:

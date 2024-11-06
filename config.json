@@ -6,8 +6,7 @@
     }
   },
     "images": {
-      "docker.io/nginx:latest" :  "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx",
-      "gcr.io/kaniko-project/executor":"registry.cn-hangzhou.aliyuncs.com/imagessync/kaniko-executor"
+      "docker.io/nginx:latest" :  "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx"
     }
   }
   
