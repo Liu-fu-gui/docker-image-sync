@@ -6,7 +6,6 @@
     }
   },
     "images": {
-      "docker.io/nginx:latest" :  "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx",
       "ghcr.io/open-webui/open-webui:main" :"registry.cn-hangzhou.aliyuncs.com/imagessync/open-webui/open-webui:main"
     }
   }
