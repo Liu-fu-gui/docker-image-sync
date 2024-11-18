@@ -12,10 +12,21 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    - name: 确保 auth.json 文件存在
+      run: |
+        echo "检查 auth.json 文件是否存在"
+        ls -l configs/auth.json
+
     - name: 镜像同步配置处理
       run: |
         echo "处理 auth.json 中的密码"
-        sed -i 's|${{ secrets.DOCKERHUB_PASSWORD }}|'"${{ secrets.DOCKERHUB_PASSWORD }}"'|g' auth.json
+        # 确保 auth.json 存在
+        if [ -f "configs/auth.json" ]; then
+          sed -i 's|${{ secrets.DOCKERHUB_PASSWORD }}|'"${{ secrets.DOCKERHUB_PASSWORD }}"'|g' configs/auth.json
+        else
+          echo "auth.json 文件不存在，请检查路径"
+          exit 1
+        fi
 
     - name: 下载 image-syncer 工具包
       run: |
@@ -27,5 +38,5 @@ jobs:
       run: |
         set -e  # 如果有命令失败则停止执行
         echo "开始同步镜像"
-        ./image-syncer --proc=3 --auth=auth.json --images=images.json --retries=1 || { echo '镜像同步失败'; exit 1; }
+        ./image-syncer --proc=20 --auth=configs/auth.json --images=images.json --retries=2 || { echo '镜像同步失败'; exit 1; }
         echo "同步镜像完成"
