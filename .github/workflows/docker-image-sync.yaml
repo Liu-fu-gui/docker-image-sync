@@ -23,12 +23,7 @@ jobs:
         ls -l configs/auth.json  # 显示文件的大小和权限
         cat configs/auth.json  # 打印文件内容
 
-    - name: 下载 image-syncer 工具包
-      run: |
-          echo "下载 image-syncer 工具包"
-          wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
-          tar -zxf image-syncer-v1.5.5-linux-amd64.tar.gz
-          chmod +x image-syncer-v1.5.5-linux-amd64/image-syncer  # 给正确的文件路径添加执行权限
+
 
     - name: 执行同步镜像
       run: |
