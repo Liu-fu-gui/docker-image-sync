@@ -12,20 +12,21 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: 保存 auth.json 到文件
+    - name: 生成镜像同步配置文件
       run: |
-        echo "${{ secrets.DOCKER_AUTH_JSON }}" > configs/auth.json
+        echo "使用 GitHub Secrets 生成 config.json"
+        sed -i 's|DOCKERHUB_PASSWORD|${{ secrets.DOCKERHUB_PASSWORD }}|g' configs/auth.json
 
     - name: 检查 auth.json 文件内容
       run: |
-          echo "查看 auth.json 文件内容"
-          ls -l configs/auth.json  # 显示文件的大小和权限
-    
+        echo "查看 auth.json 文件内容"
+        ls -l configs/auth.json  # 显示文件的大小和权限
+        cat configs/auth.json  # 打印文件内容
+
     - name: 使用 auth.json 登录到阿里云 Docker 仓库
       run: |
-              echo "使用 auth.json 登录"
-              docker login registry.cn-hangzhou.aliyuncs.com --config configs
-          
+        echo "使用 auth.json 登录"
+        docker login registry.cn-hangzhou.aliyuncs.com --username "涛涛的存钱罐" --password-stdin < configs/auth.json
 
     - name: 下载 image-syncer 工具包
       run: |
