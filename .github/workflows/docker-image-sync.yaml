@@ -30,5 +30,6 @@ jobs:
         set -e  # 如果有命令失败则停止执行
         echo "开始同步镜像"
         chmod +x image-syncer
-        ./image-syncer-v1.5.5-linux-amd64/image-syncer --proc=3 --auth=configs/auth.json --images=configs/images.json --retries=2 || { echo '镜像同步失败'; exit 1; }
+        ls -l .
+        ./image-syncer --proc=3 --auth=configs/auth.json --images=configs/images.json --retries=2 || { echo '镜像同步失败'; exit 1; }
         echo "同步镜像完成"
