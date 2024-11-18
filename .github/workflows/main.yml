@@ -13,12 +13,24 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: 镜像同步配置处理
+    - name: 生成镜像同步配置文件
       run: |
-        echo "处理配置文件"
-        sed -i 's/DOCKERHUB_PASSWORD/${{ secrets.DOCKERHUB_PASSWORD }}/g' config.json
-        
-    - name: 下载image-sync工具包
+        echo "创建配置文件 config.json"
+        cat <<EOF > config.json
+        {
+          "auth": {
+            "registry.cn-hangzhou.aliyuncs.com": {
+              "username": "涛涛的存钱罐",
+              "password": "${{ secrets.DOCKERHUB_PASSWORD }}"
+            }
+          },
+          "images": {
+            "registry.k8s.io/nfd/node-feature-discovery:v0.16.3": "registry.cn-hangzhou.aliyuncs.com/imagessync/nfd/node-feature-discovery:v0.16.3"
+          }
+        }
+        EOF
+
+    - name: 下载 image-sync 工具包
       run: |
         echo "下载 image-syncer 工具包"
         wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
