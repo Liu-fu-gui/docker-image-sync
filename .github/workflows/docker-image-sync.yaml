@@ -19,7 +19,6 @@ jobs:
     - name: 确保 auth.json 文件存在
       run: |
         echo "检查 auth.json 文件是否存在"
-        ls -l configs/auth.json  # 列出文件详细信息
         cat configs/auth.json    # 打印文件内容
 
     - name: 登录到阿里云 Docker 仓库
