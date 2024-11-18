@@ -28,6 +28,12 @@ jobs:
           exit 1
         fi
 
+    - name: 登录到阿里云 Docker 仓库
+      run: |
+        echo "正在登录到阿里云 Docker 仓库"
+        # 使用 auth.json 配置文件进行登录
+        cat configs/auth.json | docker login registry.cn-hangzhou.aliyuncs.com --username "涛涛的存钱罐" --password-stdin
+
     - name: 下载 image-syncer 工具包
       run: |
         echo "下载 image-syncer 工具包"
