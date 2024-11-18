@@ -1,3 +1,7 @@
-{
-    "nginx:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx:latest"
-}
+[
+    {
+      "src": "nginx:latest",
+      "dest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx:latest"
+    }
+  ]
+  

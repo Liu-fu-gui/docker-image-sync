@@ -38,5 +38,5 @@ jobs:
       run: |
         set -e  # 如果有命令失败则停止执行
         echo "开始同步镜像"
-        ./image-syncer --proc=20 --auth=configs/auth.json --images=images.json --retries=2 || { echo '镜像同步失败'; exit 1; }
+        ./image-syncer --proc=3 --auth=configs/auth.json --images=configs/images.json --retries=2 || { echo '镜像同步失败'; exit 1; }
         echo "同步镜像完成"
