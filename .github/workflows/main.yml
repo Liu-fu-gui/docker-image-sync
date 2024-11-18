@@ -16,8 +16,7 @@ jobs:
     - name: 镜像同步配置处理
       run: |
         echo "处理配置文件"
-        # 将 DOCKERHUB_PASSWORD 直接替换为明文密码
-        sed -i 's/DOCKERHUB_PASSWORD/NhyaP7dsmPEzEH8Qz0FW6Iq52rR9Kx/g' config.json
+        sed -i 's|DOCKERHUB_PASSWORD|${{ secrets.DOCKERHUB_PASSWORD }}|g' config.json
 
         
     - name: 下载image-sync工具包
