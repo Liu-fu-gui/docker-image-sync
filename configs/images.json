@@ -1,4 +1,4 @@
 {
-      "nginx:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx:latest"
+      "docker.io/nginx:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx:latest"
 }
   
