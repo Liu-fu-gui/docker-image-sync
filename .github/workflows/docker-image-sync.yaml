@@ -17,17 +17,16 @@ jobs:
         echo "使用 GitHub Secrets 生成 config.json"
         sed -i 's|DOCKERHUB_PASSWORD|${{ secrets.DOCKERHUB_PASSWORD }}|g' configs/auth.json
         sed -i 's|DOCKERIO_PASSWORD|${{ secrets.DOCKERIO_PASSWORD }}|g' configs/auth.json
+        sed -i 's|NVCRIO_PASSWORD|${{ secrets.NVCRIO_PASSWORD }}|g' configs/auth.json
 
-    - name: 检查 auth.json 文件内容
+    - name: 检查当前架构
       run: |
-        echo "查看 auth.json 文件内容"
-        ls -l configs/auth.json  # 显示文件的大小和权限
+        tree  .
 
     - name: 执行同步镜像
       run: |
         set -e  # 如果有命令失败则停止执行
         echo "开始同步镜像"
         chmod +x image-syncer/image-syncer  # 赋予执行权限
-        tree  .
         ./image-syncer/image-syncer --proc=3 --auth=configs/auth.json --images=configs/images.json --retries=2 || { echo '镜像同步失败'; exit 1; }
         echo "同步镜像完成"
