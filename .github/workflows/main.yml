@@ -2,8 +2,6 @@ name: docker-image-sync
 on:
   push:
     branches: [ main ]
-  #schedule:
-  #  - cron: '0 01 * * *'
   
 jobs:
   image-sync:
@@ -15,20 +13,8 @@ jobs:
 
     - name: 生成镜像同步配置文件
       run: |
-        echo "创建配置文件 config.json"
-        cat <<EOF > config.json
-        {
-          "auth": {
-            "registry.cn-hangzhou.aliyuncs.com": {
-              "username": "涛涛的存钱罐",
-              "password": "${{ secrets.DOCKERHUB_PASSWORD }}"
-            }
-          },
-          "images": {
-            "registry.k8s.io/nfd/node-feature-discovery:v0.16.3": "registry.cn-hangzhou.aliyuncs.com/imagessync/nfd/node-feature-discovery:v0.16.3"
-          }
-        }
-        EOF
+        echo "使用 GitHub Secrets 生成 config.json"
+        sed -i 's|DOCKERHUB_PASSWORD|${{ secrets.DOCKERHUB_PASSWORD }}|g' config.json
 
     - name: 下载 image-sync 工具包
       run: |
