@@ -21,8 +21,8 @@ jobs:
     - name: 下载image-sync工具包
       run: |
         echo "下载 image-syncer 工具包"
-        wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.3.1/image-syncer-v1.3.1-linux-amd64.tar.gz
-        tar -zxf image-syncer-v1.3.1-linux-amd64.tar.gz
+        wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
+        tar -zxf image-syncer-v1.5.5-linux-amd64.tar.gz
       
     - name: 执行同步镜像
       id: sync
@@ -32,29 +32,3 @@ jobs:
         IMAGE="nginx:latest"  # 你可以根据需求动态指定镜像名称
         ./image-syncer --proc=20 --config=config.json --retries=2 || { echo '镜像同步失败'; exit 1; }
         echo "同步镜像完成"
-        echo "::set-output name=image_name::$IMAGE"  # 将镜像名称传递到后续步骤
-
-    - name: 发送钉钉通知
-      run: |
-        STATUS="同步成功"
-        if [[ "${{ steps.sync.outcome }}" == "failure" ]]; then
-          STATUS="同步失败"
-        elif [[ "${{ steps.sync.outcome }}" == "skipped" ]]; then
-          STATUS="镜像已存在"
-        fi
-
-        # 获取镜像名称
-        IMAGE="${{ steps.sync.outputs.image_name }}"
-        
-        # 发送钉钉通知
-        curl -X POST https://oapi.dingtalk.com/robot/send?access_token=${{ secrets.ACCESS_TOKEN }} \
-        -H 'Content-Type: application/json' \
-        -d "{
-          \"msgtype\": \"text\",
-          \"text\": {
-            \"content\": \"同步状态: ${STATUS}，镜像: ${IMAGE}，拉取地址: registry.cn-hangzhou.aliyuncs.com/imagessync/${IMAGE}\"
-          },
-          \"at\": {
-            \"isAtAll\": true
-          }
-        }"
