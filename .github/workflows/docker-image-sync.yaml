@@ -20,18 +20,12 @@ jobs:
       run: |
           echo "查看 auth.json 文件内容"
           ls -l configs/auth.json  # 显示文件的大小和权限
-          cat configs/auth.json     # 打印文件内容
     
-    - name: 打印 DOCKERHUB_PASSWORD
+    - name: 使用 auth.json 登录到阿里云 Docker 仓库
       run: |
-            echo "DockerHub 密码: ${{ secrets.DOCKERHUB_PASSWORD }}"
-        
-
-    - name: 登录到阿里云 Docker 仓库
-      run: |
-        echo "正在登录到阿里云 Docker 仓库"
-        # 使用 auth.json 配置文件进行登录
-        docker login registry.cn-hangzhou.aliyuncs.com --username "涛涛的存钱罐" --password-stdin
+              echo "使用 auth.json 登录"
+              docker login registry.cn-hangzhou.aliyuncs.com --config configs
+          
 
     - name: 下载 image-syncer 工具包
       run: |
