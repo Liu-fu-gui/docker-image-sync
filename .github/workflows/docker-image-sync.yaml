@@ -1,10 +1,9 @@
 name: docker-image-sync
+
 on:
   push:
     branches: [ main ]
-  # schedule:
-  #   - cron: '0 01 * * *'
-  
+
 jobs:
   image-sync:
     runs-on: ubuntu-latest
@@ -15,28 +14,18 @@ jobs:
 
     - name: 镜像同步配置处理
       run: |
-        echo "处理配置文件"
-        sed -i 's|DOCKERHUB_PASSWORD|${{ secrets.DOCKERHUB_PASSWORD }}|g' config.json
+        echo "处理 auth.json 中的密码"
+        sed -i 's|${{ secrets.DOCKERHUB_PASSWORD }}|'"${{ secrets.DOCKERHUB_PASSWORD }}"'|g' auth.json
 
-        
-    - name: 下载image-sync工具包
+    - name: 下载 image-syncer 工具包
       run: |
         echo "下载 image-syncer 工具包"
         wget https://github.com/AliyunContainerService/image-syncer/releases/download/v1.5.5/image-syncer-v1.5.5-linux-amd64.tar.gz
         tar -zxf image-syncer-v1.5.5-linux-amd64.tar.gz
 
-    - name: 查看解压后的文件
-      run: |
-        ls -l  # 查看解压目录中的文件，确保 image-syncer 存在
-
-    - name: 确保文件有执行权限
-      run: |
-        chmod +x image-syncer  # 确保 image-syncer 有执行权限
-
     - name: 执行同步镜像
-      id: sync
       run: |
         set -e  # 如果有命令失败则停止执行
         echo "开始同步镜像"
-        ./image-syncer --proc=20 --config=config.json --retries=2 || { echo '镜像同步失败'; exit 1; }
+        ./image-syncer --proc=3 --auth=auth.json --images=images.json --retries=1 || { echo '镜像同步失败'; exit 1; }
         echo "同步镜像完成"
