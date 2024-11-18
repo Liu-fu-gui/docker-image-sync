@@ -12,28 +12,20 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    - name: 保存 auth.json 到文件
+      run: |
+        echo "${{ secrets.DOCKER_AUTH_JSON }}" > configs/auth.json
+
     - name: 确保 auth.json 文件存在
       run: |
         echo "检查 auth.json 文件是否存在"
         ls -l configs/auth.json
 
-    - name: 镜像同步配置处理
-      run: |
-        echo "处理 auth.json 中的密码"
-        # 确保 auth.json 存在
-        if [ -f "configs/auth.json" ]; then
-          sed -i 's|${{ secrets.DOCKERHUB_PASSWORD }}|'"${{ secrets.DOCKERHUB_PASSWORD }}"'|g' configs/auth.json
-        else
-          echo "auth.json 文件不存在，请检查路径"
-          exit 1
-        fi
-
     - name: 登录到阿里云 Docker 仓库
       run: |
         echo "正在登录到阿里云 Docker 仓库"
         # 使用 auth.json 配置文件进行登录
-        cat configs/auth.json | docker login registry.cn-hangzhou.aliyuncs.com --username "涛涛的存钱罐" --password "NhyaP7dsmPEzEH8Qz0FW6Iq52rR9Kx"
-
+        docker login registry.cn-hangzhou.aliyuncs.com --username "涛涛的存钱罐" --password-stdin < configs/auth.json
 
     - name: 下载 image-syncer 工具包
       run: |
