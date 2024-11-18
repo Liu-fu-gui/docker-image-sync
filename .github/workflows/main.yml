@@ -16,7 +16,9 @@ jobs:
     - name: 镜像同步配置处理
       run: |
         echo "处理配置文件"
-        sed -i 's/DOCKERHUB_PASSWORD/${{ secrets.DOCKERHUB_PASSWORD }}/g' config.json
+        # 将 DOCKERHUB_PASSWORD 直接替换为明文密码
+        sed -i 's/DOCKERHUB_PASSWORD/NhyaP7dsmPEzEH8Qz0FW6Iq52rR9Kx/g' config.json
+
         
     - name: 下载image-sync工具包
       run: |
@@ -36,6 +38,6 @@ jobs:
       id: sync
       run: |
         set -e  # 如果有命令失败则停止执行
-        echo "正在执行同步命令：./image-syncer --proc=20 --config=config.json --retries=2"
+        echo "开始同步镜像"
         ./image-syncer --proc=20 --config=config.json --retries=2 || { echo '镜像同步失败'; exit 1; }
         echo "同步镜像完成"

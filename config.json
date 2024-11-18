@@ -2,7 +2,7 @@
   "auth": {
     "registry.cn-hangzhou.aliyuncs.com": {
       "username": "涛涛的存钱罐",
-      "password": "NhyaP7dsmPEzEH8Qz0FW6Iq52rR9Kx"
+      "password": "DOCKERHUB_PASSWORD"
     }
   },
   "images": {
