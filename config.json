@@ -6,6 +6,6 @@
     }
   },
   "images": {
-    "registry.k8s.io/nfd/node-feature-discovery:v0.16.3": "registry.cn-hangzhou.aliyuncs.com/imagessync/nfd/node-feature-discovery:v0.16.3"
+    "nginx:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx:latest"
   }
 }
