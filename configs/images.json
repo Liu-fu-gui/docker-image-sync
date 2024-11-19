@@ -1,5 +1,5 @@
 {
       "docker.io/nginx:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx:latest",
-      "nvcr.io/nvidia/k8s-device-plugin": "registry.cn-hangzhou.aliyuncs.com/imagessync/k8s-device-plugin"
+      "nvcr.io/nvidia/k8s-device-plugin:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/k8s-device-plugin:latest"
 }
   
