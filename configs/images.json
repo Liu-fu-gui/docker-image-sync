@@ -1,5 +1,6 @@
 {
       "docker.io/nginx:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx:latest",
-      "docker.io/milvusdb/etcd:3.5.14-r1": "registry.cn-hangzhou.aliyuncs.com/imagessync/etcd:3.5.14-r1"
+      "docker.io/sonarqube:lts": "registry.cn-hangzhou.aliyuncs.com/imagessync/sonarqube:lts",
+      "docker.io/postgres:15-alpine": "registry.cn-hangzhou.aliyuncs.com/imagessync/postgres:15-alpine"
 }
   
