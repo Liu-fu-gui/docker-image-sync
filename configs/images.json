@@ -1,6 +1,5 @@
 {
-      "docker.io/nginx:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/nginx:latest",
-      "docker.io/sonarqube:lts": "registry.cn-hangzhou.aliyuncs.com/imagessync/sonarqube:lts",
-      "docker.io/postgres:15-alpine": "registry.cn-hangzhou.aliyuncs.com/imagessync/postgres:15-alpine"
+      "docker.io/nacos/nacos-server:v2.0.4": "registry.cn-hangzhou.aliyuncs.com/imagessync/nacos-server:v2.0.4",
+
 }
   
