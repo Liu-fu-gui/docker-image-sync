@@ -19,6 +19,7 @@ jobs:
         sed -i 's|DOCKERIO_PASSWORD|${{ secrets.DOCKERIO_PASSWORD }}|g' configs/auth.json
         sed -i 's|NVCRIO_PASSWORD|${{ secrets.NVCRIO_PASSWORD }}|g' configs/auth.json
         sed -i 's|GHCRIO_PASSWORD|${{ secrets.GHCRIO_PASSWORD }}|g' configs/auth.json
+        sed -i 's|GHCRIO_PASSWORD|${{ secrets.HARBOR_PASSWORD }}|g' configs/auth.json
 
     - name: 检查当前架构
       run: |
