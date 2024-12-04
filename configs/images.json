@@ -1,5 +1,6 @@
 {
-  "docker.io/ollama/ollama:latest": "registry.cn-hangzhou.aliyuncs.com/imagessync/ollama:latest"
+  "docker.io/ollama/ollama:latest": "ghcr.io/liu-fu-gui/ollama:latest",
+  "ghcr.io/open-webui/open-webui:git-9b6076f-ollama": "ghcr.io/liu-fu-gui/open-webui:git-9b6076f-ollama",
 
 }
   
