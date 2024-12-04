@@ -1,5 +1,5 @@
 {
-  "docker.io/ollama/ollama:latest": "harbor.xiaoliu.xn--6qq986b3xl/ollama/ollama:latest"
+  "docker.io/ollama/ollama:latest": "harbor.xiaoliu.xn--6qq986b3xl/library/ollama:latest"
 
 }
   
