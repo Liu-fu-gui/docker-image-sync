@@ -21,7 +21,7 @@ jobs:
         sed -i 's|GHCRIO_PASSWORD|${{ secrets.GHCRIO_PASSWORD }}|g' configs/auth.json
         sed -i 's|GHCRIO_PASSWORD|${{ secrets.HARBOR_PASSWORD }}|g' configs/auth.json
 
-    - name: 检查当前架构
+    - name: 检查架构
       run: |
         tree  .
 
@@ -29,6 +29,7 @@ jobs:
       run: |
         set -e  # 如果有命令失败则停止执行
         echo "开始同步镜像"
-        chmod +x image-syncer155/image-syncer  # 赋予执行权限
-        ./image-syncer155/image-syncer --proc=3 --auth=configs/auth.json --images=configs/images.json --retries=2 || { echo '镜像同步失败'; exit 1; }
+        chmod +x image-syncer155/image-syncer 
+        docker login harbor.xiaoliu.xn--6qq986b3xl -u admin -p 1J8G4RxarRUw
+        ./image-syncer155/image-syncer --proc=3 --auth=configs/auth.json --images=configs/images.json --retries=1 || { echo '镜像同步失败'; exit 1; }
         echo "同步镜像完成"
