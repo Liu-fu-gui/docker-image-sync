@@ -1,5 +1,4 @@
 {
-  "docker.io/ollama/ollama:latest": "ghcr.io/liu-fu-gui/ollama:latest",
-  "ghcr.io/open-webui/open-webui:git-9b6076f-ollama": "ghcr.io/liu-fu-gui/open-webui:git-9b6076f-ollama"
+  "docker.io/ollama/ollama:latest": "harbor.xiaoliu.xn--6qq986b3xl/ollama/ollama:latest"
 }
   
