@@ -1,4 +1,4 @@
 {
-  "docker.io/mysql:5.7": "registry.cn-hangzhou.aliyuncs.com/imagessync/mysql:5.7"
+  "docker.io/ollama/ollama:latest": "harbor.xiaoliu.xn--6qq986b3xl/ollama/ollama:latest"
 }
   
