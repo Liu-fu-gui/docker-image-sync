@@ -1,4 +1,3 @@
 {
-  "ghcr.io/liu-fu-gui/ollama:latest": "harbor.xiaoliu.xn--6qq986b3xl/liu-fu-gui/ollama:latest",
-  "ghcr.io/liu-fu-gui/open-webui:git-9b6076f-ollama": "harbor.xiaoliu.xn--6qq986b3xl/liu-fu-gui/open-webui:git-9b6076f-ollama"
+  "docker.io/grafana/grafana:latest": "harbor.xiaoliu.xn--6qq986b3xl/grafana:latest"
 }
