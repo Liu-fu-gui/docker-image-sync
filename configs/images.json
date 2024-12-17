@@ -1,5 +1,5 @@
 {
-  "docker.io/nginx:latest":"harbor.xiaoliu.xn--6qq986b3xl/liu-fu-gui/nginx:latest"
+  "docker.io/jgraph/drawio:latest":"harbor.xiaoliu.xn--6qq986b3xl/liu-fu-gui/drawio:latest"
 }
 
 
