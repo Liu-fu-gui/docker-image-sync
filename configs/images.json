@@ -1,5 +1,7 @@
 {
-  "docker.io/jgraph/drawio:latest":"harbor.xiaoliu.xn--6qq986b3xl/liu-fu-gui/drawio:latest"
+  "docker.io/wordpress:latest":"registry.cn-hangzhou.aliyuncs.com/imagessync/wordpress:latest",
+  "docker.io/mysql:5.7":"registry.cn-hangzhou.aliyuncs.com/imagessync/mysql:5.7"
+
 }
 
 
