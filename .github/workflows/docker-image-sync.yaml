@@ -1,5 +1,3 @@
-name: docker-image-sync
-
 on:
   push:
     branches: [ main ]
@@ -32,3 +30,13 @@ jobs:
         chmod +x image-syncer155/image-syncer 
         ./image-syncer155/image-syncer --proc=2 --auth=configs/auth.json --images=configs/images.json --retries=1 || { echo '镜像同步失败'; exit 1; }
         echo "同步镜像完成"
+
+    - name: 通知钉钉机器人
+      run: |
+        curl -X POST -H "Content-Type: application/json" \
+        -d '{
+          "msgtype": "text",
+          "text": {
+            "content": "镜像同步任务完成！"
+          }
+        }' https://oapi.dingtalk.com/robot/send?access_token=8953afbe643682a206506b08d649e400c728c20a6eccf874553865d4d45a1a0a
