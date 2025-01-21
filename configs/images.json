@@ -1,7 +1,5 @@
 {
-  "docker.io/wordpress:latest":"registry.cn-hangzhou.aliyuncs.com/imagessync/wordpress:latest",
-  "docker.io/mysql:5.7":"registry.cn-hangzhou.aliyuncs.com/imagessync/mysql:5.7"
-
+  "docker.io/bitnamicharts/redis-cluster/manifests:11.4.0":"registry.cn-hangzhou.aliyuncs.com/imagessync/manifests:11.4.0"
 }
 
 
