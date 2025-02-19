@@ -1,5 +1,5 @@
 {
-  "docker.io/bitnamicharts/redis-cluster/manifests:11.4.0":"registry.cn-hangzhou.aliyuncs.com/imagessync/manifests:11.4.0"
+  "docker.io/nacos/nacos-server:latest":"registry.cn-hangzhou.aliyuncs.com/imagessync/nacos-server:latest"
 }
 
 
