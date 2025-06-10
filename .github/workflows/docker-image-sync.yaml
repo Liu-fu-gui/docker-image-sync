@@ -1,7 +1,7 @@
 on:
   push:
     branches: [ main ]
-
+  workflow_dispatch: 
 jobs:
   image-sync:
     runs-on: ubuntu-latest
@@ -13,15 +13,23 @@ jobs:
     - name: 生成镜像同步配置文件
       run: |
         echo "使用 GitHub Secrets 生成 config.json"
-        sed -i 's|DOCKERHUB_PASSWORD|${{ secrets.DOCKERHUB_PASSWORD }}|g' configs/auth.json
-        sed -i 's|DOCKERIO_PASSWORD|${{ secrets.DOCKERIO_PASSWORD }}|g' configs/auth.json
-        sed -i 's|NVCRIO_PASSWORD|${{ secrets.NVCRIO_PASSWORD }}|g' configs/auth.json
-        sed -i 's|GHCRIO_PASSWORD|${{ secrets.GHCRIO_PASSWORD }}|g' configs/auth.json
-        sed -i 's|HARBOR_PASSWORD|${{ secrets.HARBOR_PASSWORD }}|g' configs/auth.json
+        # 定义需要替换的变量名与 Secrets 映射（可扩展）
+        declare -A SECRET_MAP=(
+          ["DOCKERHUB_PASSWORD"]="${{ secrets.DOCKERHUB_PASSWORD }}"
+          ["DOCKERIO_PASSWORD"]="${{ secrets.DOCKERIO_PASSWORD }}"
+          ["NVCRIO_PASSWORD"]="${{ secrets.NVCRIO_PASSWORD }}"
+          ["GHCRIO_PASSWORD"]="${{ secrets.GHCRIO_PASSWORD }}"
+          ["HARBOR_PASSWORD"]="${{ secrets.HARBOR_PASSWORD }}"
+        )
+        # 循环替换占位符
+        for key in "${!SECRET_MAP[@]}"; do
+          sed -i "s|${key}|${SECRET_MAP[$key]}|g" configs/auth.json
+        done
 
     - name: 检查架构
       run: |
-        tree  .
+        sudo apt-get update && sudo apt-get install -y tree
+        tree .
 
     - name: 执行同步镜像
       run: |
